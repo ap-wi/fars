@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
   Package fars - Analyse some data from US National Highway Traffic Safety Administration's Fatality Analysis Reporting System (NHTSF)
 
 ## Table of Contents
+
   * Description
   * Prerequisites
   * Install
@@ -20,51 +21,63 @@ knitr::opts_chunk$set(echo = TRUE)
   * Contribute
   * License
 
-## Description 
+
+## Description
+
   The `"fars"` package is used to evaluate the reported accidents in the United States of America.
 
   The following functions of the "fars" package are supported:
   
   * Reading a file using the function `fars_read ()`
-  * Provision of a dataframe using `fars_summarize_years ()`
+  * Provision of a data frame using `fars_summarize_years ()`
   * Creation of a plot using `fars_map_state ()`
 
   There are further information in the vignette of the package fars and in the man. 
 
-  More information and the data files can be found on the website of the NHTSF: 
-  https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS).
+  More information and the data files can be found on the website of the 
+  
+  NHTSF: https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS).
 
 ## Prerequisites
 
 1. The following packages are used:
 
-* library(fars)
-* library(readr)
-* library(dplyr)
-* library(magrittr)
-* library(tidyr)
-* library(bindrcpp)
-* library(maps)
-* library(graphics)
+    * library(fars)
+    * library(readr)
+    * library(dplyr)
+    * library(magrittr)
+    * library(tidyr)
+    * library(bindrcpp)
+    * library(maps)
+    * library(graphics)
 
 2. Download csv files from Website of NHTSF:
 
-  The prerequisite for performing the evaluations is that the csv files ("accident_yyyy.csv.bz2") are downloaded with the accident data and are located in the current directory.
+    The prerequisite for performing the evaluations is that the csv files ("accident_yyyy.csv.bz2") are downloaded with the accident data and are located in the current directory.
+  
+    Website: https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)
 
 
 ## Install
-  Any R user can install the package with just two lines of code:
-  install.packages("devtools")
-  devtools::install_github("ap-wi/package_fars")  
+
+    Any R user can install the package with just tree lines of code:
+    
+    * install.packages("devtools")
+    * devtools::install_github("ap-wi/package_fars")
+    * library("fars"")
 
 ## Usage
+
     There are three functions in the package fars supported:
-    * Reading a file using fars_read(filename)
-    * Provision of a dataframe using fars_summarize_years(years)
-    * Creation of a plot using fars_map_state(state.num, year)
+    
+    * Reading a file using the function `fars_read(filename)`
+    * Provision of a data frame using `fars_summarize_years(years)`
+    * Creation of a plot using `fars_map_state(state.num, year)`
 
 ## Contribute
+
     Standard Readme follows the Contributor Covenant Code of Conduct.
 
 ## License
+
     CC0 by cousera

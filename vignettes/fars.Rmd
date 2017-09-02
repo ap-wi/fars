@@ -13,7 +13,7 @@ vignette: >
 knitr::opts_chunk$set( echo = TRUE )
 ```
 
-```{r, include=FALSE}
+```{r libs, include=FALSE}
 library(fars)
 library(readr)
 library(dplyr)
@@ -22,6 +22,9 @@ library(tidyr)
 library(bindrcpp)
 library(maps)
 library(graphics)
+```
+
+```{r coll, include=FALSE}
 knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
 ```
 
@@ -77,7 +80,7 @@ df <- fars_read( filename = tf )
 str(df)
 ```
 
-After the display of the structure, an output of the first 10 table entries.
+Let's have a look at an output of the first 10 table entries for some fields.
 
 ```{r, fars_read_tab}
 ## selection of some fields 

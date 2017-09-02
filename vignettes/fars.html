@@ -74,225 +74,46 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## library(fars)
-<span class="kw">library</span>(readr)</code></pre></div>
-<pre><code>## Warning: package 'readr' was built under R version 3.3.3</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)</code></pre></div>
-<pre><code>## Warning: package 'dplyr' was built under R version 3.3.3</code></pre>
-<pre><code>## 
-## Attaching package: 'dplyr'</code></pre>
-<pre><code>## The following objects are masked from 'package:stats':
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)</code></pre></div>
-<pre><code>## Warning: package 'magrittr' was built under R version 3.3.3</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)</code></pre></div>
-<pre><code>## Warning: package 'tidyr' was built under R version 3.3.3</code></pre>
-<pre><code>## 
-## Attaching package: 'tidyr'</code></pre>
-<pre><code>## The following object is masked from 'package:magrittr':
-## 
-##     extract</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(bindrcpp)</code></pre></div>
-<pre><code>## Warning: package 'bindrcpp' was built under R version 3.3.3</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(maps)</code></pre></div>
-<pre><code>## Warning: package 'maps' was built under R version 3.3.3</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(graphics)
-knitr::opts_chunk$<span class="kw">set</span>(<span class="dt">comment =</span> <span class="st">&quot;#&gt;&quot;</span>, <span class="dt">collapse =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## #' function &quot;fars_read&quot;
-## #'
-## #' @description
-## #'    Read a file that delivers data from the US National Highway Traffic Safety Administration's
-## #'    Fatality Analysis Reporting System and provide a data frame tbl
-## #'
-## #' @param filename  The name of the file which the data are to be read from.
-## #'    Each row of the table appears as one line of the file. If it does not
-## #'    contain an absolute path, the file name is relative to the current
-## #'    working directory, getwd(). Tilde-expansion is performed where supported.
-## #'    This can be a compressed file (see file).
-## #'
-## #' @return This function returns a tibble of ( &quot;tbl_df&quot;, &quot;tbl&quot;, &quot;data.frame&quot; )
-## #'
-## #' @details
-## #'    The function stopped with the message &quot;file &lt;filename&gt; does not exist&quot; if the file can not read.
-## #'
-## #' @references \url{https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)}
-## #'
-## #' @examples
-## #' tf &lt;- &quot;accident_2015.csv.bz2&quot;
-## #' fars_read(filename = tf)
-## #'
-## #' yyyy &lt;- 2015
-## #' tf &lt;- make_filename(year = yyyy)
-## #' fars_read(filename = tf)
-## #'
-## #' @export
-## #'
-## #' @importFrom readr read_csv
-## #' @importFrom dplyr tbl_df
-## #'
-fars_read &lt;-<span class="st"> </span>function(filename) {
-  if(!<span class="kw">file.exists</span>(filename))
-    <span class="kw">stop</span>(<span class="st">&quot;file '&quot;</span>, filename, <span class="st">&quot;' does not exist&quot;</span>)
-  data &lt;-<span class="st"> </span><span class="kw">suppressMessages</span>({
-    readr::<span class="kw">read_csv</span>(filename, <span class="dt">progress =</span> <span class="ot">FALSE</span>)
-  })
-  dplyr::<span class="kw">tbl_df</span>(data)
-}
-
-## #' function &quot;make_filename&quot;
-## #'
-## #' @description
-## #'    The function returns a filename for the given year
-## #'
-## #' @param year  A year (number with 4 digits)
-## #'
-## #' @return This function returns a filename as a character vector of length
-## #'    that of the longest input.
-## #'
-## #' @references \url{https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)}
-## #'
-## #' @examples
-## #' yyyy &lt;- 2015
-## #' make_filename &lt;- function(year = yyyy)
-## #'
-make_filename &lt;-<span class="st"> </span>function(year) {
-  year &lt;-<span class="st"> </span><span class="kw">as.integer</span>(year)
-  <span class="kw">sprintf</span>(<span class="st">&quot;accident_%d.csv.bz2&quot;</span>, year)
-}
-
-## #' function &quot;fars_read_years&quot;
-## #'
-## #' @description
-## #'    The function returns a list of data frames per year which contains the corresponding
-## #'    columns &quot;MONTH&quot; and &quot;year&quot; with accidents
-## #'
-## #' @param years  A vector of years (a vector consisting of numbers with 4 digits)
-## #'
-## #' @return This function returns a list with data frame per year which contains the
-## #'    corresponding columns &quot;MONTH&quot; and &quot;year&quot; with accidents
-## #'
-## #' @details
-## #'    The function registered the warning &quot;invalid year: &lt;year&gt;&quot; and returns NULL
-## #'    if there is not a file for a year in the input parameter vector &quot;years&quot;.
-## #'
-## #' @examples
-## #' yyyys &lt;- c(2014, 2015)
-## #' fars_read_years(years = yyyys)
-## #'
-## #' @importFrom dplyr mutate select
-## #' @importFrom magrittr %&gt;%
-## #'
-fars_read_years &lt;-<span class="st"> </span>function(years) {
-  <span class="kw">lapply</span>(years, function(year) {
-    file &lt;-<span class="st"> </span><span class="kw">make_filename</span>(year)
-    <span class="kw">tryCatch</span>({
-      dat &lt;-<span class="st"> </span><span class="kw">fars_read</span>(file)
-      dplyr::<span class="kw">mutate</span>(dat, <span class="dt">year =</span> year) %&gt;%
-<span class="st">      </span>dplyr::<span class="kw">select</span>(MONTH, year)
-    }, <span class="dt">error =</span> function(e) {
-      <span class="kw">warning</span>(<span class="st">&quot;invalid year: &quot;</span>, year)
-      <span class="kw">return</span>(<span class="ot">NULL</span>)
-    })
-  })
-}
-
-## #' function &quot;fars_summarize_years&quot;
-## #'
-## #' @description
-## #'    The function returns a data frame with the number of accidents per month and year.
-## #'    The dimensions are the months per row and years per column.
-## #'
-## #' @param years  A vector of years (a vector consisting of numbers with 4 digits)
-## #'
-## #' @return This function returns a key-value pair across multiple columns
-## #'    (with rows per month and columns per year)
-## #'
-## #' @examples
-## #' yyyys &lt;- c(2014, 2015)
-## #' fars_summarize_years(years = yyyys)
-## #'
-## #' @export
-## #'
-## #' @importFrom dplyr bind_rows group_by summarize
-## #' @importFrom magrittr %&gt;%
-## #' @importFrom tidyr spread
-## #'
-fars_summarize_years &lt;-<span class="st"> </span>function(years) {
-  dat_list &lt;-<span class="st"> </span><span class="kw">fars_read_years</span>(years)
-    dplyr::<span class="kw">bind_rows</span>(dat_list) %&gt;%
-<span class="st">    </span>dplyr::<span class="kw">group_by</span>(year, MONTH) %&gt;%
-<span class="st">    </span>dplyr::<span class="kw">summarize</span>(<span class="dt">n =</span> <span class="kw">n</span>()) %&gt;%
-<span class="st">    </span>tidyr::<span class="kw">spread</span>(year, n)
-}
-
-## #' function &quot;fars_map_state&quot;
-## #'
-## #' @description
-## #'    The function plot a map of a US state with the coordinates of the accidents in a year
-## #'
-## #' @param state.num A number of a US state (number with 2 digits)
-## #' @param year      A year (number with 4 digits)
-## #'
-## #' @return none
-## #'
-## #' @details
-## #'    The function stopped with the message invalid STATE number: &quot;, &lt;state.num&gt;)&quot;
-## #'    if no record with the state number in the data frame
-## #'
-## #'    The function generate the message &quot;no accidents to plot&quot; and returns the invisible value NULL
-## #'    if there is not any accident in the selected data
-## #'
-## #' @examples
-## #' state_no &lt;- 01
-## #' yyyy &lt;- 2015
-## #' fars_map_state(state.num=state_no, year=yyyy)
-## #'
-## #' @export
-## #'
-## #' @importFrom dplyr filter
-## #' @importFrom maps map
-## #' @importFrom graphics points
-## #'
-fars_map_state &lt;-<span class="st"> </span>function(state.num, year) {
-  filename &lt;-<span class="st"> </span><span class="kw">make_filename</span>(year)
-  data &lt;-<span class="st"> </span><span class="kw">fars_read</span>(filename)
-  state.num &lt;-<span class="st"> </span><span class="kw">as.integer</span>(state.num)
-
-  if(!(state.num %in%<span class="st"> </span><span class="kw">unique</span>(data$STATE)))
-    <span class="kw">stop</span>(<span class="st">&quot;invalid STATE number: &quot;</span>, state.num)
-  data.sub &lt;-<span class="st"> </span>dplyr::<span class="kw">filter</span>(data, STATE ==<span class="st"> </span>state.num)
-  if(<span class="kw">nrow</span>(data.sub) ==<span class="st"> </span>0L) {
-    <span class="kw">message</span>(<span class="st">&quot;no accidents to plot&quot;</span>)
-    <span class="kw">return</span>(<span class="kw">invisible</span>(<span class="ot">NULL</span>))
-  }
-  <span class="kw">is.na</span>(data.sub$LONGITUD) &lt;-<span class="st"> </span>data.sub$LONGITUD &gt;<span class="st"> </span><span class="dv">900</span>
-  <span class="kw">is.na</span>(data.sub$LATITUDE) &lt;-<span class="st"> </span>data.sub$LATITUDE &gt;<span class="st"> </span><span class="dv">90</span>
-  <span class="kw">with</span>(data.sub, {
-    maps::<span class="kw">map</span>(<span class="st">&quot;state&quot;</span>, <span class="dt">ylim =</span> <span class="kw">range</span>(LATITUDE, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),
-              <span class="dt">xlim =</span> <span class="kw">range</span>(LONGITUD, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))
-    graphics::<span class="kw">points</span>(LONGITUD, LATITUDE, <span class="dt">pch =</span> <span class="dv">46</span>)
-  })
-}</code></pre></div>
 <div id="introduction-to-package-fars" class="section level2">
 <h2>Introduction to package “fars”</h2>
-<p>The “fars” package is used to evaluate the reported accidents in the United States of America.</p>
-<p>The statistics are collected and published by the US National Highway Traffic Safety Administration’s Fatality Analysis Reporting System, which is a nationwide census providing the American public yearly data regarding fatal injuries suffered in motor vehicle traffic crashes.</p>
+<p>The <code>&quot;fars&quot;</code> package is used to evaluate the reported accidents in the United States of America.</p>
+<p>The statistics are collected and published by the <em>US National Highway Traffic Safety Administration’s Fatality Analysis Reporting System (NHTSF)</em>, which is a nationwide census providing the American public yearly data regarding fatal injuries suffered in motor vehicle traffic crashes.</p>
 <p>More information and the data files can be found on the website <a href="https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)" class="uri">https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)</a>.</p>
-<p>The package supports the following evaluations by means of functions: * a tabular analysis of accidents per month and year, and * a graphical representation of the accidents per US state per year</p>
-<p>The prerequisite for performing the evaluations is that the csv files (“accident_yyyy.csv.bz2”) are downloaded with the accident data and are located in the current directory.</p>
-<p>The following functions of the “fars” package are supported and are described: * Reading a file using fars_read () * Provision of a dataframe using fars_summarize_years () * Creation of a plot using fars_map_state ()</p>
+<p>The package supports the following evaluations by means of functions:</p>
+<ul>
+<li>a tabular analysis of accidents per month and year, and</li>
+<li>a graphical representation of the accidents per US state per year</li>
+</ul>
+<p>The following functions of the “fars” package are supported and are described:</p>
+<ul>
+<li>Reading a file using the function <code>fars_read()</code></li>
+<li>Provision of a dataframe using <code>fars_summarize_years()</code></li>
+<li>Creation of a plot using <code>fars_map_state()</code></li>
+</ul>
+</div>
+<div id="prerequisites" class="section level2">
+<h2>Prerequisites</h2>
+<ol style="list-style-type: decimal">
+<li>The following packages are used:</li>
+</ol>
+<ul>
+<li>library(fars)</li>
+<li>library(readr)</li>
+<li>library(dplyr)</li>
+<li>library(magrittr)</li>
+<li>library(tidyr)</li>
+<li>library(bindrcpp)</li>
+<li>library(maps)</li>
+<li>library(graphics)</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Download csv files from Website of NHTSF: The prerequisite for performing the evaluations is that the csv files (“accident_yyyy.csv.bz2”) are downloaded with the accident data and are located in the current directory.</p>
+<p><em>Website</em> <a href="https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)" class="uri">https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)</a></p></li>
+</ol>
 </div>
 <div id="read-dataset-with-function-fars_read" class="section level2">
 <h2>Read dataset with function fars_read()</h2>
-<p>The function fars_read (filename) is used to read a file (eg “accident_2015.csv.bz2”) with accidents of the NHTSF. The argument of the function is the filename and the return is the tibble (or data frame).</p>
-<div id="website" class="section level6">
-<h6>Website</h6>
-<p><a href="https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)" class="uri">https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)</a></p>
-</div>
+<p>The function <code>fars_read (filename)</code> is used to read a file (eg “accident_2015.csv.bz2”) with accidents of the NHTSF. The argument of the function is the filename and the return is the tibble (or data frame).</p>
 <div id="excample" class="section level6">
 <h6>Excample</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tf &lt;-<span class="st"> &quot;accident_2015.csv.bz2&quot;</span>
@@ -460,74 +281,26 @@ df &lt;-<span class="st"> </span><span class="kw">fars_read</span>( <span class=
 <span class="co">#&gt;   ..$ default: list()</span>
 <span class="co">#&gt;   .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_guess&quot; &quot;collector&quot;</span>
 <span class="co">#&gt;   ..- attr(*, &quot;class&quot;)= chr &quot;col_spec&quot;</span></code></pre></div>
-<p>After the display of the structure, an output of the first 10 table entries.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>( <span class="kw">head</span>(df, <span class="dv">10</span>) )</code></pre></div>
+<p>Let’s have a look at an output of the first 10 table entries for some fields.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## selection of some fields 
+df_sel &lt;-<span class="st"> </span><span class="kw">select</span>( df, STATE, PERSONS, COUNTY, CITY, DAY, MONTH, YEAR, SP_JUR, FATALS )
+knitr::<span class="kw">kable</span>( <span class="kw">head</span>(df_sel, <span class="dv">10</span>) )</code></pre></div>
 <table>
 <thead>
 <tr class="header">
 <th align="right">STATE</th>
-<th align="right">ST_CASE</th>
-<th align="right">VE_TOTAL</th>
-<th align="right">VE_FORMS</th>
-<th align="right">PVH_INVL</th>
-<th align="right">PEDS</th>
-<th align="right">PERNOTMVIT</th>
-<th align="right">PERMVIT</th>
 <th align="right">PERSONS</th>
 <th align="right">COUNTY</th>
 <th align="right">CITY</th>
 <th align="right">DAY</th>
 <th align="right">MONTH</th>
 <th align="right">YEAR</th>
-<th align="right">DAY_WEEK</th>
-<th align="right">HOUR</th>
-<th align="right">MINUTE</th>
-<th align="right">NHS</th>
-<th align="right">RUR_URB</th>
-<th align="right">FUNC_SYS</th>
-<th align="right">RD_OWNER</th>
-<th align="right">ROUTE</th>
-<th align="left">TWAY_ID</th>
-<th align="left">TWAY_ID2</th>
-<th align="right">MILEPT</th>
-<th align="right">LATITUDE</th>
-<th align="right">LONGITUD</th>
 <th align="right">SP_JUR</th>
-<th align="right">HARM_EV</th>
-<th align="right">MAN_COLL</th>
-<th align="right">RELJCT1</th>
-<th align="right">RELJCT2</th>
-<th align="right">TYP_INT</th>
-<th align="right">WRK_ZONE</th>
-<th align="right">REL_ROAD</th>
-<th align="right">LGT_COND</th>
-<th align="right">WEATHER1</th>
-<th align="right">WEATHER2</th>
-<th align="right">WEATHER</th>
-<th align="right">SCH_BUS</th>
-<th align="left">RAIL</th>
-<th align="right">NOT_HOUR</th>
-<th align="right">NOT_MIN</th>
-<th align="right">ARR_HOUR</th>
-<th align="right">ARR_MIN</th>
-<th align="right">HOSP_HR</th>
-<th align="right">HOSP_MN</th>
-<th align="right">CF1</th>
-<th align="right">CF2</th>
-<th align="right">CF3</th>
 <th align="right">FATALS</th>
-<th align="right">DRUNK_DR</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">1</td>
-<td align="right">10001</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">127</td>
@@ -535,53 +308,10 @@ df &lt;-<span class="st"> </span><span class="kw">fars_read</span>( <span class=
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">2015</td>
-<td align="right">5</td>
-<td align="right">2</td>
-<td align="right">40</td>
 <td align="right">0</td>
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="left">SR-5</td>
-<td align="left">NA</td>
-<td align="right">1754</td>
-<td align="right">33.87865</td>
-<td align="right">-87.32533</td>
-<td align="right">0</td>
-<td align="right">35</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="left">0000000</td>
-<td align="right">99</td>
-<td align="right">99</td>
-<td align="right">2</td>
-<td align="right">58</td>
-<td align="right">88</td>
-<td align="right">88</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
-<td align="right">10002</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">83</td>
@@ -589,107 +319,21 @@ df &lt;-<span class="st"> </span><span class="kw">fars_read</span>( <span class=
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">2015</td>
-<td align="right">5</td>
-<td align="right">22</td>
-<td align="right">13</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="left">I-65</td>
-<td align="left">NA</td>
-<td align="right">3604</td>
-<td align="right">34.91044</td>
-<td align="right">-86.90871</td>
-<td align="right">0</td>
-<td align="right">34</td>
-<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">2</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="left">0000000</td>
-<td align="right">99</td>
-<td align="right">99</td>
-<td align="right">22</td>
-<td align="right">20</td>
-<td align="right">88</td>
-<td align="right">88</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">10003</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">2</td>
 <td align="right">2</td>
 <td align="right">11</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">2015</td>
-<td align="right">5</td>
-<td align="right">1</td>
-<td align="right">25</td>
 <td align="right">0</td>
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="left">US-SR 6</td>
-<td align="left">NA</td>
-<td align="right">1958</td>
-<td align="right">32.14201</td>
-<td align="right">-85.75846</td>
-<td align="right">0</td>
-<td align="right">42</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="left">0000000</td>
-<td align="right">99</td>
-<td align="right">99</td>
-<td align="right">1</td>
-<td align="right">45</td>
-<td align="right">99</td>
-<td align="right">99</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
-<td align="right">10004</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">45</td>
@@ -697,215 +341,43 @@ df &lt;-<span class="st"> </span><span class="kw">fars_read</span>( <span class=
 <td align="right">4</td>
 <td align="right">1</td>
 <td align="right">2015</td>
-<td align="right">1</td>
 <td align="right">0</td>
-<td align="right">57</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="left">SR-27</td>
-<td align="left">NA</td>
-<td align="right">566</td>
-<td align="right">31.43981</td>
-<td align="right">-85.51030</td>
-<td align="right">0</td>
-<td align="right">53</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">2</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="left">0000000</td>
-<td align="right">99</td>
-<td align="right">99</td>
-<td align="right">1</td>
-<td align="right">15</td>
-<td align="right">88</td>
-<td align="right">88</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">10005</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">2</td>
 <td align="right">2</td>
 <td align="right">45</td>
 <td align="right">2050</td>
 <td align="right">7</td>
 <td align="right">1</td>
 <td align="right">2015</td>
-<td align="right">4</td>
-<td align="right">7</td>
-<td align="right">9</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">3</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="left">US-SR 53</td>
-<td align="left">HINTON WATERS AVE</td>
-<td align="right">308</td>
-<td align="right">31.31933</td>
-<td align="right">-85.51510</td>
-<td align="right">0</td>
-<td align="right">12</td>
-<td align="right">6</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">3</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="left">0000000</td>
-<td align="right">99</td>
-<td align="right">99</td>
-<td align="right">7</td>
-<td align="right">16</td>
-<td align="right">88</td>
-<td align="right">88</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="right">1</td>
-<td align="right">10006</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">2</td>
 <td align="right">2</td>
 <td align="right">111</td>
 <td align="right">0</td>
 <td align="right">8</td>
 <td align="right">1</td>
 <td align="right">2015</td>
-<td align="right">5</td>
-<td align="right">9</td>
-<td align="right">59</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">5</td>
-<td align="right">2</td>
-<td align="right">4</td>
-<td align="left">CR-82</td>
-<td align="left">NA</td>
-<td align="right">0</td>
-<td align="right">33.43849</td>
-<td align="right">-85.38927</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="left">0000000</td>
-<td align="right">99</td>
-<td align="right">99</td>
-<td align="right">10</td>
-<td align="right">17</td>
-<td align="right">99</td>
-<td align="right">99</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">10007</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">2</td>
 <td align="right">2</td>
 <td align="right">89</td>
 <td align="right">1730</td>
 <td align="right">8</td>
 <td align="right">1</td>
 <td align="right">2015</td>
-<td align="right">5</td>
-<td align="right">18</td>
-<td align="right">33</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">3</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="left">US-SR 2</td>
-<td align="left">NA</td>
-<td align="right">1030</td>
-<td align="right">34.77304</td>
-<td align="right">-86.52766</td>
-<td align="right">0</td>
-<td align="right">43</td>
-<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">3</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="left">0000000</td>
-<td align="right">99</td>
-<td align="right">99</td>
-<td align="right">18</td>
-<td align="right">38</td>
-<td align="right">99</td>
-<td align="right">99</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
-<td align="right">10008</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">73</td>
@@ -913,53 +385,10 @@ df &lt;-<span class="st"> </span><span class="kw">fars_read</span>( <span class=
 <td align="right">3</td>
 <td align="right">1</td>
 <td align="right">2015</td>
-<td align="right">7</td>
-<td align="right">21</td>
-<td align="right">30</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">5</td>
-<td align="right">4</td>
-<td align="right">6</td>
-<td align="left">ISHKOODA RD SW</td>
-<td align="left">NA</td>
-<td align="right">0</td>
-<td align="right">33.46249</td>
-<td align="right">-86.87091</td>
-<td align="right">0</td>
-<td align="right">8</td>
-<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="left">0000000</td>
-<td align="right">99</td>
-<td align="right">99</td>
-<td align="right">21</td>
-<td align="right">48</td>
-<td align="right">99</td>
-<td align="right">99</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
 </tr>
 <tr class="odd">
-<td align="right">1</td>
-<td align="right">10009</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">117</td>
@@ -967,98 +396,19 @@ df &lt;-<span class="st"> </span><span class="kw">fars_read</span>( <span class=
 <td align="right">13</td>
 <td align="right">1</td>
 <td align="right">2015</td>
-<td align="right">3</td>
-<td align="right">8</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">2</td>
-<td align="right">3</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="left">US-SR 3</td>
-<td align="left">NA</td>
-<td align="right">2520</td>
-<td align="right">33.23610</td>
-<td align="right">-86.81392</td>
-<td align="right">0</td>
-<td align="right">23</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">1</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="right">10</td>
-<td align="right">0</td>
-<td align="left">0000000</td>
-<td align="right">99</td>
-<td align="right">99</td>
-<td align="right">8</td>
-<td align="right">3</td>
-<td align="right">88</td>
-<td align="right">88</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="right">1</td>
-<td align="right">10010</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">2</td>
 <td align="right">2</td>
 <td align="right">33</td>
 <td align="right">0</td>
 <td align="right">5</td>
 <td align="right">1</td>
 <td align="right">2015</td>
-<td align="right">2</td>
-<td align="right">18</td>
-<td align="right">45</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="right">4</td>
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="left">SR-184</td>
-<td align="left">NA</td>
-<td align="right">34</td>
-<td align="right">34.75837</td>
-<td align="right">-87.60751</td>
-<td align="right">0</td>
-<td align="right">12</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="left">0000000</td>
-<td align="right">99</td>
-<td align="right">99</td>
-<td align="right">19</td>
-<td align="right">1</td>
-<td align="right">99</td>
-<td align="right">99</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
 </tr>
 </tbody>
 </table>
@@ -1066,7 +416,7 @@ df &lt;-<span class="st"> </span><span class="kw">fars_read</span>( <span class=
 </div>
 <div id="prepare-fars-data-with-function-fars_summarize_years" class="section level2">
 <h2>Prepare fars data with function fars_summarize_years()</h2>
-<p>The fars_summarize_years(years) function is used to create a tabular representation of the accidents per month and year. The argument of the function is a vector with the years to be considered for the creation and the return is the tibble (or data frame).</p>
+<p>The function <code>fars_summarize_years(years)</code> is used to create a tabular representation of the accidents per month and year. The argument of the function is a vector with the years to be considered for the creation and the return is the tibble (or data frame).</p>
 <div id="excample-1" class="section level6">
 <h6>Excample</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">yyyys &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2014</span>, <span class="dv">2015</span>)
@@ -1153,7 +503,7 @@ df_summ &lt;-<span class="st"> </span><span class="kw">fars_summarize_years</spa
 </div>
 <div id="plot-the-distributation-of-accidents-in-an-us-state-with-function-fars_map_state" class="section level2">
 <h2>Plot the distributation of accidents in an US state with function fars_map_state()</h2>
-<p>The function fars_summarize_years (state.num, year) is used to create a plot with the distribution of all accidents in one year on the map of a US state.</p>
+<p>The function <code>fars_summarize_years (state.num, year)</code> is used to create a plot with the distribution of all accidents in one year on the map of a US state.</p>
 <div id="excample-2" class="section level6">
 <h6>Excample</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">state_no &lt;-<span class="st"> </span><span class="dv">01</span>
@@ -1168,7 +518,7 @@ yyyy &lt;-<span class="st"> </span><span class="dv">2014</span>
 yyyy &lt;-<span class="st"> </span><span class="dv">2015</span>
 <span class="kw">fars_map_state</span>( <span class="dt">state.num=</span>state_no, <span class="dt">year=</span>yyyy )
 <span class="kw">title</span>(<span class="dt">main=</span><span class="st">&quot;Alabama: Accidents in 2015&quot;</span>)</code></pre></div>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAAhFBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZpAAZrY6AAA6OgA6ZpA6ZrY6kNtmAABmOgBmZjpmkLZmtrZmtttmtv+QOgCQOjqQZjqQZmaQ2/+2ZgC2Zjq229u22/+2/9u2///bkDrbtmbbtpDbtrbb25Db27bb////tmb/25D/27b//7b//9v///9q8rY5AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAKl0lEQVR4nO2aa3vcNBCFJ4XSAt1wKYQAhXJLSvD//3/sri1pRpJ1ZI2d9sM58MS7K++M9I5mpJUrE9WUfOwOfOoiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAIC+piA/vtBXlU+fPG7vra+ju7YQy1ARw/gw2sp72ja//PbLfZ36X8L0NEDeH/zzc19u3t5h8oBN7RL/1uA9hjAF3dy892t3Lw9t96KfH5//uLLh8XCy79fv5nmhq/D5Wr3PLSvbs/Xf38U+ephejp9fjbz9jwj5MVvd9eblx48nQ7u/yQHD0DefXh98/3T7WUsrx6eTi8fov1zd66vLw1/yJvlMg/75cPj6+v13b/n10+nm/vLZ5cBvJe35/+T/aMDcPgAptnmJVx//fSlnvOX234+h/hxvv0xfetR3sTreR7cBxOz/c++f0gDOLr/p8MHEO0/3d58+88p2b/6vFhY+qO6dXk5X696q+0/zfPkuQJwer4BXDp4eZ0S/vrlcyzbAzhL25+mf+7mxelZAnB6vgE8yiU8L34PKfD+8uX/fpjj93hJgeslpoDMKRDez9dXl4B/uFaW5wnA6fkGMP1yDs3dzf1i/2J58XKtng/LxRbRSzjfaRMvfr271tXnCsDp6AG0luE99Oro/vO3GBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBAEdDRBCT7Sn2fz3aNGH2SDhlwfbH/dxyYLqPn83xJkiW+S++1dLtzLbDjaE9vstn+1KmEo8zzdgAwBCsYXu2kwUz6Y0QGIerN7AObAJgQpFuo1MgCbFeIYhL6vY/dXKJOCbt7sEAFJnPPpshsgHeTFQaiobkDhjyx/QgRCLjjth9xa3qT4Sj6yZg9h8wIlXPQbn1I0JebzFNF3hbjDQTSsgivSF+CuFJsWk7oGSfDhUkpdxWqqfOi0vxS4+NEyQd2AxF5iYkX8zgGYbIrJqwupz76lEatayt9dAOkCKjan9wCk64zJq11TWL2OGdBlv2sGaesqAn5CoiOgc6vMN4+D/K0qoNB+L6BkPy43O+RAaV/SDkUqdww4UBjM5Jz6+t+VYmnhMjs5fw6Yb8+LsMqyviKBHNh1xpS3nlUGAFrDkZXTURUzyGRy51637UCtXCnjJBY//wzKmVhH+wJKS0z6beCyr+uBzt24W8Q70X5A6b0o225AFQNpau4RAL1c6Y2iugWZgK2hOIiao8m/Q4lCttqkaeq2HyNa8+0HFKtcWiFtz/2AlKew0TINLvuq6Ki6Kf053DWDZhfTZCbOvoDiIpmGtJ99iSVB16TF6YYu1luLQYhqcBYJZUpKbx0d7LCv3ahyvepwi3+NOuBI53NigzHef/2J2mr1/hhoOZDsnT6s6ftBDwDl/kIWqBg4RpCvJOlES3TVcznIEMkU/jdHW7iPvfbDvNmliop9kZ8O+5extAoHizl1mAIjM0gfbLlyrG4/LfGTs8jpVJ1sALq3um1AdgqFrNUBcA5AxVM/Y9BrpM++2ZGkxxrxhgk56EmxtDGP016icc+xsYmiOjBO7f4al4qyBdRbI3pSzBZOGwZ3CqTNggqn7r0/xdQBaPhEO/EDmlRqVaiMj0BsBGLG2kPGnewrWtldbRvNtiWwMa1MRepz0OE7UYkHQTsFYLGuD4nTLqXPfhvQclGcivsdEVa1U72eL8mXo8jZGIoOSfW2po3VNnOHOpOLa6h7Bhlv5cKyA6BguYxmNei93iVOyXSn+rkaCW3ocsW+7WrlnMadYsafmlVmkWvaWG2r9FKyMblmkK0Oap2Z7KfDDqY8DHlrXvDW7lprS4tw+lTXuLR3HFBR5sX+SUVw2EHlq+Ucdc8gMabUwVA+azdKNAKVsObQzLNXL1cUjVziHO5YqVaa1AxX2aZ/gTh+jcWjk6w7koyKc4YWGboEN1s1RwGVq1goOob7aBEq4xvsmbXSCyh7bY5e5/fNAbRnkI3CcigaOh1mWMezk5brPMrqrCDsIMcjoGKsq4LJCh8g/V6vZKL9jALKvmfOIvKTxREHlr2pm1lPWr3c0qSR68o9NIKi+gSr6cfx0uKbouUH6hnH8n6DkaIpH4dZ5ZePHIBMlYyVOdIy2THkwPQ0ZZieTj5A+UvtKrSOA1r7pgnwYI4VgMxrMSPoMlI05YjUxDd7FV+KSclK9A2jKbz2LclqZ3sj0d1k5sumAwNk39qphn0HQNW6XHahbSRvUvmaxXgF3ialPoqenKWx4WXeAG5YGV3Fam21wjHa/+6PfQ7q3y5+dLeNdDZVke2yk47ZVfbb8Vtm5cN5xqZ/1TwOqNmzytHNJkklwmJSWvVkyEErxpK9XjfSbMrLpmppVY0uVezrx27mbGvYQY46LfF6SYZGWk3ZrrZ2R1d3V+yvJ6g3w7JszR11LsLDO4DiWdZmmadrLZfuRaxiS69wLkB5e23S7LDISNFRFWDfDJI1s10lCO6D9G1F7aycGG2QKc5xqyLKjy+Fp7w2FObEnI7iXoKmynk6tLHJtRqMhH/H47BfFPkMR98iM1aDZnfeZR69dtpf/57YZXgUUHV9z9JM/Yu57Vr5nnqOXjzvHrO/zJwaeXik2wGoLPym3fdUI/SxqBHLb+JdHitN07QWyMr6v24kb4oZ2lgwPSGOliuPH0znvPbz6pOMun5q6Cm5ygEncdN+WLdWMXv+DVWYNCJFN1XUnYCWcgY0OIA4fw6yn/iP22+2hT0J6qBjAF0pOmZfjR0tyKNtcX4fN4Kpq8qP2u/dSQ1uduYlpHw+vM1K03xxeruj/TCFfPY7AKHbhpXsD2+l2vbTU+xxBwjQksdHDECXyMMCEPAcBcj7c6jt+2j76VR1PMioSKs8jsvh8Lqbmxe11CuzO9mfQokz2/Wt9ntWsXS27d2Z5L5D16cY6B0zeglsKnV6R7Shky0Hib1o8LvNIEnYk/3dAhB36HEpGJhC7TtTACqedxtEYX/Xwl2fMd1BgDuEtRt2ivPahN8vj1et9DlwdMKzePbZP9R8pz6FPnzSIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgoP8BPnZSg1CSBV4AAAAASUVORK5CYII=" /><!-- --></p>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 </div>
 </div>
 
