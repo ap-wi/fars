@@ -63,7 +63,7 @@ knitr::opts_chunk$set(echo = TRUE)
     Any R user can install the package with just tree lines of code:
     
     * install.packages("devtools")
-    * devtools::install_github("ap-wi/package_fars")
+    * devtools::install_github("ap-wi/fars")
     * library("fars"")
 
 ## Usage
