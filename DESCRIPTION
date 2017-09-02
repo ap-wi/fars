@@ -1,0 +1,26 @@
+Package: fars
+Type: Package
+Title: fars (Fatality Analysis Reporting System)
+Version: 0.1.1
+Imports: readr (>= 1.1.1),
+         dplyr (>= 0.7.2),
+         magrittr (>= 1.5),
+         tidyr (>= 0.7.0),
+         maps (>= 3.2.0),
+         graphics (>= 3.3.1)
+Authors@R: person("Someone", "Coursera", email = "someone@coursera.net", role = c("aut", "cre"))
+Maintainer: Someone Coursera <someone@coursera.net>
+Description: Based on data from the US National Highway Traffic Safety Administration's Fatality Analysis Reporting System you can: 
+             First) plot a map of a US state with the coordinates of the accidents in a year   or 
+             Second) get a data frame with the number of accidents per month and year   or 
+             Third) read a data file from the US National Highway Traffic Safety Administration's Fatality Analysis Reporting System and provide a data frame
+URL: <https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)>
+YEAR: 2017
+License: CC0
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Suggests: knitr,
+    rmarkdown,
+    testthat
+VignetteBuilder: knitr

@@ -1,0 +1,127 @@
+---
+title: "Vignette for Package fars"
+author: "A. Paul" 
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introducing fars}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set( echo = TRUE )
+```
+
+```{r, include=FALSE}
+library(fars)
+library(readr)
+library(dplyr)
+library(magrittr)
+library(tidyr)
+library(bindrcpp)
+library(maps)
+library(graphics)
+knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
+```
+
+## Introduction to package "fars"
+
+The `"fars"` package is used to evaluate the reported accidents in the United States of America.
+
+The statistics are collected and published by the *US National Highway Traffic Safety Administration's Fatality Analysis Reporting System (NHTSF)*, which is a nationwide census providing the American public yearly data regarding fatal injuries suffered in motor vehicle traffic crashes.
+
+More information and the data files can be found on the website 
+https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS).
+
+The package supports the following evaluations by means of functions:
+
+* a tabular analysis of accidents per month and year, and
+* a graphical representation of the accidents per US state per year
+
+The following functions of the "fars" package are supported and are described:
+
+* Reading a file using the function `fars_read()`
+* Provision of a dataframe using `fars_summarize_years()`
+* Creation of a plot using `fars_map_state()`
+
+## Prerequisites  
+
+1. The following packages are used:
+
+* library(fars)
+* library(readr)
+* library(dplyr)
+* library(magrittr)
+* library(tidyr)
+* library(bindrcpp)
+* library(maps)
+* library(graphics)
+
+2. Download csv files from Website of NHTSF:
+The prerequisite for performing the evaluations is that the csv files ("accident_yyyy.csv.bz2") are downloaded with the accident data and are located in the current directory.
+
+    *Website*  https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)
+
+## Read dataset with function fars_read() 
+
+The function `fars_read (filename)` is used to read a file (eg "accident_2015.csv.bz2") with accidents of the NHTSF.
+The argument of the function is the filename and the return is the tibble (or data frame). 
+
+
+###### Excample
+
+```{r, farsread}
+tf <- "accident_2015.csv.bz2"
+df <- fars_read( filename = tf )
+str(df)
+```
+
+After the display of the structure, an output of the first 10 table entries.
+
+```{r, fars_read_tab}
+## selection of some fields 
+df_sel <- select( df, STATE, PERSONS, COUNTY, CITY, DAY, MONTH, YEAR, SP_JUR, FATALS )
+knitr::kable( head(df_sel, 10) )
+```
+
+
+## Prepare fars data with function fars_summarize_years()
+
+The function `fars_summarize_years(years)` is used to create a tabular representation of the accidents per month and year. The argument of the function is a vector with the years to be considered for the creation and the return is the tibble (or data frame).
+
+###### Excample
+
+```{r, fars_summ}
+yyyys <- c(2014, 2015)
+df_summ <- fars_summarize_years( years = yyyys )
+str(df_summ)
+```
+
+Here is the output for the year 2015. 
+
+```{r, fars_summ_tab}
+knitr::kable(head(df_summ, 13))
+```
+
+
+## Plot the distributation of accidents in an US state with function fars_map_state()
+
+The function `fars_summarize_years (state.num, year)` is used to create a plot with the distribution of all accidents in one year on the map of a US state.
+
+###### Excample
+
+```{r, fig.height=5, fig.width=7}
+state_no <- 01
+par( mfrow = c(1, 3) )
+## title(main="Accidents in the US State Alabama")
+yyyy <- 2013
+fars_map_state( state.num=state_no, year=yyyy )
+title(main="Alabama: Accidents in 2013")
+yyyy <- 2014
+fars_map_state( state.num=state_no, year=yyyy )
+title(main="Alabama: Accidents in 2014")
+yyyy <- 2015
+fars_map_state( state.num=state_no, year=yyyy )
+title(main="Alabama: Accidents in 2015")
+```
