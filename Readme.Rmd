@@ -64,7 +64,7 @@ knitr::opts_chunk$set(echo = TRUE)
     
     * install.packages("devtools")
     * devtools::install_github("ap-wi/fars")
-    * library("fars"")
+    * library("fars")
 
 ## Usage
 
