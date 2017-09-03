@@ -1,0 +1,46 @@
+---
+title: "Externe Daten"
+author: "A. Paul"
+date: "September 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+library(fars)
+library(readr)
+library(dplyr)
+```
+
+## External Dataset
+
+The statistics about the accidents are collected and published by the *US National Highway Traffic Safety Administration's Fatality Analysis Reporting System (NHTSF)*, which is a nationwide census providing the American public yearly data regarding fatal injuries suffered in motor vehicle traffic crashes.
+
+More information and the data files can be found on the website 
+
+  *@source*  https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS).
+
+There are three data file (‘accident_2013’, ‘accident_2014’ and ‘accident_2015’) in the directory ~/inst/extdata.
+
+They are used for tests, for examples and for show how to work with an dataset.
+
+
+## @Format 
+
+The fields of the csv files are shown here.   
+
+```{r format}
+df <- fars_read( filename = "accident_2015.csv.bz2" )
+str(df)
+```
+
+## Example
+
+Let's have a look at an output of the first 10 table entries for some fields.
+
+```{r example}
+knitr::kable( head(df, 10) )
+```
