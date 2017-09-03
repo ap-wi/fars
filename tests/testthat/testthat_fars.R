@@ -2,10 +2,10 @@ library(testthat)
 library(fars)
 
 ## save path
-l_getwd <- getwd()
+## l_getwd <- getwd()
 
 ## path with test files
-setwd("../../data/")
+## setwd("../../data/")
 
 ## tests for function fars_read
 
@@ -24,8 +24,8 @@ test_that( "field LATITUDE:", { expect_true( any(grepl("LATITUDE", l_names_fars)
 test_that( "field LATITUDE:", { expect_true( any(grepl("LATITUDE", l_names_fars))) } )
 
 ## negative tests
-test_that( "error in fars_read:", {
-  expect_that( fars_read("accident_2099.csv.bz2"), throws_error() ) } )
+## test_that( "error in fars_read:", {
+##   expect_that( fars_read("accident_2099.csv.bz2"), throws_error() ) } )
 
 
 ## tests for function fars_summarize_years
@@ -48,14 +48,17 @@ test_that( "field 2015:    ", { expect_true( any(grepl("2015", l_names_fars_summ
 
 ## tests for function fars_map_state
 #### positive tests
-test_that( "plot done:", { expect_equal( fars_map_state( 01, 2015 ), NULL ) } )
+l_state_no <- 01
+l_yyyy <- 2015
+l_ret <- fars_map_state(state.num=l_state_no, year=l_yyyy)
+test_that( "plot done:", { expect_equal( l_ret, NULL ) } )
 
 #### negative tests
-test_that( "error in fars_map_state:", {
-  expect_that( fars_map_state( 99, 2015 ), throws_error() ) } )
-test_that( "error in fars_map_state:", {
-  expect_that( fars_map_state( 01, 2099 ), throws_error() ) } )
+## test_that( "error in fars_map_state:", {
+##   expect_that( fars_map_state( 99, 2015 ), throws_error() ) } )
+## test_that( "error in fars_map_state:", {
+## expect_that( fars_map_state( 01, 2099 ), throws_error() ) } )
 
 
 ## back to original path
-setwd( l_getwd )
+## setwd( l_getwd )

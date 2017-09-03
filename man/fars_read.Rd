@@ -2,36 +2,36 @@
 % Please edit documentation in R/fars_functions.R
 \name{fars_read}
 \alias{fars_read}
-\title{Function 'fars_read'}
+\title{function "fars_read"}
 \usage{
 fars_read(filename)
 }
 \arguments{
-\item{filename}{The name of the file which the data are to be read from. 
-Each row of the table appears as one line of the file. If it does not 
-contain an absolute path, the file name is relative to the current 
-working directory, getwd(). Tilde-expansion is performed where supported. 
+\item{filename}{The name of the file which the data are to be read from.
+Each row of the table appears as one line of the file. If it does not
+contain an absolute path, the file name is relative to the current
+working directory, getwd(). Tilde-expansion is performed where supported.
 This can be a compressed file (see file).}
 }
 \value{
-This function returns a data frame tbl
+This function returns a tibble of ( "tbl_df", "tbl", "data.frame" )
 }
 \description{
-Read a file that delivers data from the US National Highway Traffic Safety Administration's 
+Read a file that delivers data from the US National Highway Traffic Safety Administration's
    Fatality Analysis Reporting System and provide a data frame tbl
 }
 \details{
-The function stopped with the message 'file <filename> does not exist' if the file can not read.
+The function stopped with the message "file <filename> does not exist" if the file can not read.
 }
 \examples{
-tf <- 'accident_2015.csv.bz2'
-fars_read(filename = tf)
+tf <- "accident_2015.csv.bz2"
+fars_read( filename = tf )
 
 yyyy <- 2015
 tf <- make_filename(year = yyyy)
-fars_read(filename = tf)
+fars_read( filename = tf )
 
 }
 \references{
-(\url{https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)})
+\url{https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)}
 }

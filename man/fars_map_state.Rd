@@ -2,7 +2,7 @@
 % Please edit documentation in R/fars_functions.R
 \name{fars_map_state}
 \alias{fars_map_state}
-\title{Function 'fars_map_state'}
+\title{function "fars_map_state"}
 \usage{
 fars_map_state(state.num, year)
 }
@@ -18,15 +18,15 @@ none
 The function plot a map of a US state with the coordinates of the accidents in a year
 }
 \details{
-The function stopped with the message invalid STATE number: ', <state.num>)' 
-   if no record with the state number in the data frame 
-   
-   The function generate the message 'no accidents to plot' and returns the invisible value NULL 
+The function stopped with the message invalid STATE number: ", <state.num>)"
+   if no record with the state number in the data frame
+
+   The function generate the message "no accidents to plot" and returns the invisible value NULL
    if there is not any accident in the selected data
 }
 \examples{
-state_no <- 01
+stateno <- 01
 yyyy <- 2015
-fars_map_state(state.num=state_no, year=yyyy)
+fars_map_state( state.num=stateno, year=yyyy )
 
 }

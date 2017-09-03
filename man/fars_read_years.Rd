@@ -2,7 +2,7 @@
 % Please edit documentation in R/fars_functions.R
 \name{fars_read_years}
 \alias{fars_read_years}
-\title{Function 'fars_read_years'}
+\title{function "fars_read_years"}
 \usage{
 fars_read_years(years)
 }
@@ -10,19 +10,19 @@ fars_read_years(years)
 \item{years}{A vector of years (a vector consisting of numbers with 4 digits)}
 }
 \value{
-This function returns a list with data frame per year which contains the 
-   corresponding columns 'MONTH' and 'year' with accidents
+This function returns a list with data frame per year which contains the
+   corresponding columns "MONTH" and "year" with accidents
 }
 \description{
-The function returns a list of data frames per year which contains the corresponding 
-   columns 'MONTH' and 'year' with accidents
+The function returns a list of data frames per year which contains the corresponding
+   columns "MONTH" and "year" with accidents
 }
 \details{
-The function registered the warning 'invalid year: <year>' and returns NULL 
-   if there is not a file for a year in the input parameter vector 'years'.
+The function registered the warning "invalid year: <year>" and returns NULL
+   if there is not a file for a year in the input parameter vector "years".
 }
 \examples{
 yyyys <- c(2014, 2015)
-fars_read_years(years = yyyys)
+fars_read_years( years = yyyys )
 
 }

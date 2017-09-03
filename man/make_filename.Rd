@@ -2,7 +2,7 @@
 % Please edit documentation in R/fars_functions.R
 \name{make_filename}
 \alias{make_filename}
-\title{Function 'make_filename'}
+\title{function "make_filename"}
 \usage{
 make_filename(year)
 }
@@ -10,7 +10,7 @@ make_filename(year)
 \item{year}{A year (number with 4 digits)}
 }
 \value{
-This function returns a filename as a character vector of length 
+This function returns a filename as a character vector of length
    that of the longest input.
 }
 \description{
@@ -18,9 +18,9 @@ The function returns a filename for the given year
 }
 \examples{
 yyyy <- 2015
-make_filename <- function(year = yyyy)
+make_filename <- function( year=yyyy )
 
 }
 \references{
-(\url{https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)})
+\url{https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)}
 }

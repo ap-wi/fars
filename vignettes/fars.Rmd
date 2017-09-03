@@ -84,8 +84,8 @@ Let's have a look at an output of the first 10 table entries for some fields.
 
 ```{r, fars_read_tab}
 ## selection of some fields 
-df_sel <- select( df, STATE, PERSONS, COUNTY, CITY, DAY, MONTH, YEAR, SP_JUR, FATALS )
-knitr::kable( head(df_sel, 10) )
+df_sel <- dplyr::select( df, STATE, PERSONS, COUNTY, CITY, DAY, MONTH, YEAR, SP_JUR, FATALS )
+knitr::kable( head(df, 10) )
 ```
 
 

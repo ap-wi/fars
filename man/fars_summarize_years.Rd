@@ -2,7 +2,7 @@
 % Please edit documentation in R/fars_functions.R
 \name{fars_summarize_years}
 \alias{fars_summarize_years}
-\title{Function 'fars_summarize_years'}
+\title{function "fars_summarize_years"}
 \usage{
 fars_summarize_years(years)
 }
@@ -19,6 +19,6 @@ The function returns a data frame with the number of accidents per month and yea
 }
 \examples{
 yyyys <- c(2014, 2015)
-fars_summarize_years(years = yyyys)
+fars_summarize_years( years=yyyys )
 
 }

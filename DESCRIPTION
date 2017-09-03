@@ -1,7 +1,7 @@
 Package: fars
 Type: Package
 Title: fars (Fatality Analysis Reporting System)
-Version: 0.1.1
+Version: 0.1.2
 Imports: readr (>= 1.1.1),
          dplyr (>= 0.7.2),
          magrittr (>= 1.5),
