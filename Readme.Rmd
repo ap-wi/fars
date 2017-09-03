@@ -35,9 +35,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
   There are further information in the vignette of the package fars and in the man. 
 
-  More information and the data files can be found on the website of the 
+  More information and the data files can be found on the website of the NHTSF:
   
-  NHTSF: https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS).
+  \url{https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)}
 
 ## Prerequisites
 
@@ -80,7 +80,7 @@ knitr::opts_chunk$set(echo = TRUE)
     Fixed ap-wi/fars (master - comment 215cc33)
     [![Badge](https://url/ap-wi/fars/271393672/badge)]
     
-    Website  https://travis-ci.org/ap-wi/fars/builds/271393672
+    https://travis-ci.org/ap-wi/fars/builds/271393672
 
 
 ## Contribute
