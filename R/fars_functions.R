@@ -21,10 +21,6 @@
 #' tf <- "accident_2015.csv.bz2"
 #' fars_read( filename = tf )
 #'
-#' yyyy <- 2015
-#' tf <- make_filename(year = yyyy)
-#' fars_read( filename = tf )
-#'
 #' @export
 #'
 #' @importFrom readr read_csv
@@ -32,9 +28,8 @@
 #'
 fars_read <- function(filename) {
   if(!file.exists( filename )) {
-    path <- path.expand( file.path( system.file(package = "fars") , "data") )
-    normalizePath( file.path( path, fileame ))
-    filename <- normalizePath( file.path( path, fileame ))
+    path <- path.expand( file.path( system.file(package = "fars") , "data" ) )
+    filename <- file.path( path, filename )
   }
   if(!file.exists( filename )) {
     stop("file '", filename, "' does not exist") }
@@ -83,6 +78,8 @@ make_filename <- function(year) {
 #' @examples
 #' yyyys <- c(2014, 2015)
 #' fars_read_years( years = yyyys )
+#'
+#' @export
 #'
 #' @importFrom dplyr mutate select
 #' @importFrom magrittr %>%

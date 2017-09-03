@@ -27,10 +27,6 @@ The function stopped with the message "file <filename> does not exist" if the fi
 tf <- "accident_2015.csv.bz2"
 fars_read( filename = tf )
 
-yyyy <- 2015
-tf <- make_filename(year = yyyy)
-fars_read( filename = tf )
-
 }
 \references{
 \url{https://www.nhtsa.gov/Data/Fatality-Analysis-Reporting-System-(FARS)}

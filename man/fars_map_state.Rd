@@ -25,7 +25,7 @@ The function stopped with the message invalid STATE number: ", <state.num>)"
    if there is not any accident in the selected data
 }
 \examples{
-stateno <- 01
+stateno <- 1
 yyyy <- 2015
 fars_map_state( state.num=stateno, year=yyyy )
 
