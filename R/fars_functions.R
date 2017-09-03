@@ -28,7 +28,7 @@
 #'
 fars_read <- function(filename) {
   if(!file.exists( filename )) {
-    path <- path.expand( file.path( system.file(package = "fars") , "data" ) )
+    path <- path.expand( file.path( system.file(package = "fars") , "extdata" ) )
     filename <- file.path( path, filename )
   }
   if(!file.exists( filename )) {
