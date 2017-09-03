@@ -18,6 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
   * Prerequisites
   * Install
   * Usage
+  * Travis badge
   * Contribute
   * License
 
@@ -73,6 +74,14 @@ knitr::opts_chunk$set(echo = TRUE)
     * Reading a file using the function `fars_read(filename)`
     * Provision of a data frame using `fars_summarize_years(years)`
     * Creation of a plot using `fars_map_state(state.num, year)`
+
+## Travis badge
+
+    Fixed ap-wi/fars (master - comment 215cc33)
+    [![Badge](https://url/ap-wi/fars/271393672/badge)]
+    
+    Website  https://travis-ci.org/ap-wi/fars/builds/271393672
+
 
 ## Contribute
 
