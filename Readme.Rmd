@@ -2,7 +2,7 @@
 title: "Readme"
 author: "A. Paul"
 date: "August 2017"
-output: pdf_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -82,7 +82,7 @@ knitr::opts_chunk$set(echo = TRUE)
     
     https://travis-ci.org/ap-wi/fars/builds/271393672
 
-    [![Build Status](https://travis-ci.org/ap-wi/fars.svg?branch=master)](https://travis-ci.org/ap-wi/fars)
+  [![Build Status](https://travis-ci.org/ap-wi/fars.svg?branch=master)](https://travis-ci.org/ap-wi/fars)
 
 ## Contribute
 
